@@ -19,6 +19,7 @@
     "lint": "./node_modules/.bin/eslint ./ src webpack.*.*",
     "debug": "babel-node --inspect src/*.js",
     "dev-debug": "npm-run-all --parallel debug dev-serve",
+    "pretest": "yarn lint",
     "test": "mocha --reporter progress assets/testSetup.js \"src/**/*.spec.js\""
   },
   "dependencies": {

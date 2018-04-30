@@ -1,0 +1,5 @@
+# production files
+/dist
+
+# node
+/node_modules
