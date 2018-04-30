@@ -1,0 +1,75 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Node Attach",
+      "port": 9229,
+      "address": "localhost",
+      "restart": true,
+      "cwd": "${workspaceFolder}",
+      "protocol": "inspector",
+      "preLaunchTask": "npm: debug",
+      "sourceMaps": true
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Chrome",
+      "url": "http://localhost:8000/",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,      
+      "skipFiles": [
+        "browser-sync-client.js**"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Node File",
+      "program": "${file}",
+      "sourceMaps": true,      
+      "skipFiles": [
+        "browser-sync-client.js**"
+      ]
+    },
+    {
+     "name": "Debug Nuxt",
+     "type": "node",
+     "request": "launch",
+     "protocol": "inspector",
+     "program": "${workspaceFolder}/node_modules/.bin/nuxt",
+     "stopOnEntry": false,
+     "args": ["dev"],
+     "cwd": "${workspaceFolder}",
+     "sourceMaps": true,
+     "env": {
+         "NODE_ENV": "development",
+         "DEBUG": "nuxt:*,app"
+     },
+     "skipFiles": [
+        "node_modules/**/*.js",
+        ".nuxt/**/*.js"
+      ]
+   },
+   {
+     "name": "Node Launch",
+     "type": "node",
+     "request": "launch",
+     "protocol": "inspector",
+     "stopOnEntry": false,
+     "cwd": "${workspaceFolder}",
+     "sourceMaps": true,
+     "env": {
+         "NODE_ENV": "development"
+     },
+     "skipFiles": [
+        "node_modules/**/*.js"
+      ]
+   }
+  ]
+}
