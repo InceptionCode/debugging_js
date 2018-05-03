@@ -12,6 +12,27 @@ Recreate this inside of peopleDisplay
       <span>x</span>
   </li>
 */
+export const initialDB = {
+  people: [
+    {
+      id: 1,
+      name: 'Darrell'
+    }
+  ],
+  addToDB: function(name) {
+    const currentPeople = this.people.slice();
+    const lastPersonID = currentPeople.pop().id;
+    let newPerson = {
+      id: lastPersonID + 1,
+      name
+    };
+    return this.people.push(newPerson);
+  },
+  deleteFromDB: function(name) {
+    const editedList = this.people.filter(person => person.name !== name);
+    this.people = editedList;
+  }
+};
 
 function buildElement () {
   const listElem = document.createElement('li'),
@@ -37,10 +58,13 @@ function buildElement () {
 
 function addPerson () {
   peopleDisplay.appendChild(buildElement());
+  initialDB.addToDB(input.value);
   input.value = '';
 }
 
 function deletePerson (e) {
+  const name = e.target.previousElementSibling.innerHTML;
+  initialDB.deleteFromDB(name);
   let li = e.target.parentNode;
   li.remove();
 }
