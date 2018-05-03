@@ -26,11 +26,13 @@ const initialDB = {
     this.people = editedList;
   }
 };
+
+const MockInitialDB = sinon.mock(initialDB);
 /* global describe it */
 
 describe('Demo App', ()=> {
   describe('Add A Person', ()=> {
-    it('should add a list element (person)', (done)=>{
+    it('should add a list element (person) and add person to DB', (done)=>{
       const demo = fs.readFileSync('./src/demo.html', 'utf-8');
       const { document } = (new JSDOM(demo)).window;
       const peopleDisplay = document.querySelector('ul[data-id="people-display"]'),
@@ -70,7 +72,7 @@ describe('Demo App', ()=> {
       // Expect DOM List
       expect(peopleDisplay.children.length).to.equal(2);
       expect(peopleDisplay.children[1].tagName).to.equal('LI');
-      // Expect Database
+      // Expect Database using sinon spy
       expect(initialDB).to.have.property('people');
       expect(initialDB.addToDB.callCount).to.equal(1);
       expect(initialDB.people.length).to.equal(2);
@@ -80,15 +82,19 @@ describe('Demo App', ()=> {
   
   
   describe('Delete A Person', ()=> {
-    it('Should delete a list element (person)', (done)=> {
+    it('Should delete a list element (person) and remove person from DB', (done)=> {
       const demo = fs.readFileSync('./src/demo.html', 'utf-8');
       const { document } = (new JSDOM(demo)).window;
       const peopleDisplay = document.querySelector('ul[data-id="people-display"]'),
             deletePersonBtn = document.querySelector('span[data-id="deletePerson"]');
-      
+
+      MockInitialDB.expects('deleteFromDB').once()
+        .withExactArgs('Darrell')
+        .returns(initialDB.people = [{id:2, name: 'kevin'}]); 
+
       function deletePerson (e) {
-        sinon.spy(initialDB, 'deleteFromDB');
-        initialDB.deleteFromDB('kevin');        
+        const name = e.target.previousElementSibling.innerHTML;
+        initialDB.deleteFromDB(name);             
         let li = e.target.parentNode;
         li.remove();
       }
@@ -97,8 +103,11 @@ describe('Demo App', ()=> {
       var event = document.createEvent('HTMLEvents');
       event.initEvent('click', true, false);
       deletePersonBtn.dispatchEvent(event);
-      expect(initialDB.deleteFromDB.callCount).to.equal(1);
+
+      // Expect Database using sinon mock
+      MockInitialDB.verify();
       expect(initialDB.people.length).to.equal(1);
+      // Expect DOM List
       expect(peopleDisplay.children.length).to.equal(0);
       done();
     });
