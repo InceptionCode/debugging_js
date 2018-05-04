@@ -1,4 +1,5 @@
 import sass from './main.sass'; // eslint-disable-line no-unused-vars
+import {initialDB} from './db.js';
 
 const peopleDisplay = document.querySelector('ul[data-id="people-display"]'),
       addPersonBtn = document.querySelector('button[data-id="addPerson"]'),
@@ -12,27 +13,7 @@ Recreate this inside of peopleDisplay
       <span>x</span>
   </li>
 */
-export const initialDB = {
-  people: [
-    {
-      id: 1,
-      name: 'Darrell'
-    }
-  ],
-  addToDB: function(name) {
-    const currentPeople = this.people.slice();
-    const lastPersonID = currentPeople.pop().id;
-    let newPerson = {
-      id: lastPersonID + 1,
-      name
-    };
-    return this.people.push(newPerson);
-  },
-  deleteFromDB: function(name) {
-    const editedList = this.people.filter(person => person.name !== name);
-    this.people = editedList;
-  }
-};
+console.log(initialDB);
 
 function buildElement () {
   const listElem = document.createElement('li'),

@@ -2,30 +2,9 @@ import {expect} from 'chai';
 import jsdom from 'jsdom';
 import fs from 'fs';
 import sinon from 'sinon';
-// import {initialDB} from './app';
+import {initialDB} from './db.js';
 
 const {JSDOM} = jsdom;
-const initialDB = {
-  people: [
-    {
-      id: 1,
-      name: 'Darrell'
-    }
-  ],
-  addToDB: function(name) {
-    const currentPeople = this.people.slice();
-    const lastPersonID = currentPeople.pop().id;
-    let newPerson = {
-      id: lastPersonID + 1,
-      name
-    };
-    return this.people.push(newPerson);
-  },
-  deleteFromDB: function(name) {
-    const editedList = this.people.filter(person => person.name !== name);
-    this.people = editedList;
-  }
-};
 
 const MockInitialDB = sinon.mock(initialDB);
 /* global describe it */
