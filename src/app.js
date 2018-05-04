@@ -13,7 +13,6 @@ Recreate this inside of peopleDisplay
       <span>x</span>
   </li>
 */
-console.log(initialDB);
 
 function buildElement () {
   const listElem = document.createElement('li'),
