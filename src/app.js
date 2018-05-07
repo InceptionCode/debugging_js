@@ -1,17 +1,6 @@
 import sass from './main.sass'; // eslint-disable-line no-unused-vars
 import {initialDB} from './db.js';
 
-// TODO(Feature): finish this function. Expectation to grab the list of todos from the database and render that list.
-(function initPeople() {
-  const people = initialDB.getPeople();
-  return (
-    people.forEach(person => {
-      peopleDisplay.appendChild(buildElement(person.name));
-    })
-  );
-
-})();
-
 /*
 Recreate this inside of peopleDisplay
  <li>
@@ -22,6 +11,17 @@ Recreate this inside of peopleDisplay
 const peopleDisplay = document.querySelector('ul[data-id="people-display"]'),
       addPersonBtn = document.querySelector('button[data-id="addPerson"]'),
       input = document.querySelector('input');
+
+// TODO(Feature): finish this function. Expectation to grab the list of todos from the database and render that list.
+(function initPeople() {
+  const people = initialDB.getPeople();
+  return (
+    people.forEach(person => {
+      peopleDisplay.appendChild(buildElement(person.name));
+    })
+  );
+
+})();
 
 function buildElement (name) {
 
