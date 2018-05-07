@@ -4,8 +4,15 @@ module.exports = {
       {
         id: 1,
         name: 'Darrell'
+      },
+      {
+        id: 2,
+        name: 'Kevin'
       }
     ],
+    getPeople: function() {
+      return this.people;
+    },
     addToDB: function(name) {
       const currentPeople = this.people.slice();
       const lastPersonID = currentPeople.pop().id;

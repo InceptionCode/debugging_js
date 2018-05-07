@@ -1,11 +1,17 @@
 import sass from './main.sass'; // eslint-disable-line no-unused-vars
 import {initialDB} from './db.js';
 
-const peopleDisplay = document.querySelector('ul[data-id="people-display"]'),
-      addPersonBtn = document.querySelector('button[data-id="addPerson"]'),
-      deletePersonBtn = document.querySelector('span[data-id="deletePerson"]'),
-      editPersonBtn = document.querySelector('span[data-id="editPerson"]'),  
-      input = document.querySelector('input');
+// TODO(Feature): finish this function. Expectation to grab the list of todos from the database and render that list.
+(function initPeople() {
+  const people = initialDB.getPeople();
+  return (
+    people.forEach(person => {
+      peopleDisplay.appendChild(buildElement(person.name));
+    })
+  );
+
+})();
+
 /*
 Recreate this inside of peopleDisplay
  <li>
@@ -13,14 +19,18 @@ Recreate this inside of peopleDisplay
       <span>x</span>
   </li>
 */
+const peopleDisplay = document.querySelector('ul[data-id="people-display"]'),
+      addPersonBtn = document.querySelector('button[data-id="addPerson"]'),
+      input = document.querySelector('input');
 
-function buildElement () {
+function buildElement (name) {
+
   const listElem = document.createElement('li'),
         spanName = document.createElement('span'),
         spanDelete = document.createElement('span'),
         spanEdit = document.createElement('span');
 
-  spanName.innerHTML = input.value;
+  spanName.innerHTML = name;
   spanDelete.innerHTML = ' x';
   spanDelete.setAttribute('data-id','deletePerson');
   spanEdit.innerHTML = ' e';
@@ -37,7 +47,7 @@ function buildElement () {
 }
 
 function addPerson () {
-  peopleDisplay.appendChild(buildElement());
+  peopleDisplay.appendChild(buildElement(input.value));
   initialDB.addToDB(input.value);
   input.value = '';
 }
@@ -56,5 +66,3 @@ function editPerson (e) {
 }
 
 addPersonBtn.addEventListener('click', addPerson);
-deletePersonBtn.addEventListener('click', deletePerson);
-editPersonBtn.addEventListener('click', editPerson);
