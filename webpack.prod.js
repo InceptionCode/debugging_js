@@ -3,7 +3,7 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const common = require('./webpack.common.js');
 module.exports = merge(common, {
-  devtool: 'source-map',
+  devtool: 'hidden-source-map',
   module: {
     rules: [
       {
