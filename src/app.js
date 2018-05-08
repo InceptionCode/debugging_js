@@ -12,7 +12,6 @@ const peopleDisplay = document.querySelector('ul[data-id="people-display"]'),
       addPersonBtn = document.querySelector('button[data-id="addPerson"]'),
       input = document.querySelector('input');
 
-// TODO(Feature): finish this function. Expectation to grab the list of todos from the database and render that list.
 (function initPeople() {
   const people = initialDB.getPeople();
   return (
