@@ -12,30 +12,34 @@ const peopleDisplay = document.querySelector('ul[data-id="people-display"]'),
       addPersonBtn = document.querySelector('button[data-id="addPerson"]'),
       input = document.querySelector('input');
 
-(function initPeople() {
-  const people = initialDB.getPeople();
-  return (
-    people.forEach(person => {
-      peopleDisplay.appendChild(buildElement(person.name));
-    })
-  );
+initPeople(initialDB.getPeople());
 
-})();
 
-function buildElement (name) {
+
+function initPeople(people) {
+  return people.forEach(person => {
+    peopleDisplay.appendChild(buildListElem(person.name));
+  });
+
+}
+
+function buildSpans(name, spanDelete, spanEdit, spanName) {
+  spanName.innerHTML = name;
+  spanDelete.innerHTML = ' x';
+  spanDelete.setAttribute('data-id', 'deletePerson');
+  spanEdit.innerHTML = ' e';
+  spanEdit.setAttribute('data-id', 'editPerson');
+  spanDelete.addEventListener('click', deletePerson);
+  spanEdit.addEventListener('click', editPerson);
+}
+
+function buildListElem (name) {
 
   const listElem = document.createElement('li'),
         spanName = document.createElement('span'),
         spanDelete = document.createElement('span'),
         spanEdit = document.createElement('span');
-
-  spanName.innerHTML = name;
-  spanDelete.innerHTML = ' x';
-  spanDelete.setAttribute('data-id','deletePerson');
-  spanEdit.innerHTML = ' e';
-  spanEdit.setAttribute('data-id', 'editPerson');
-  spanDelete.addEventListener('click', deletePerson);
-  spanEdit.addEventListener('click', editPerson);
+  buildSpans(name, spanDelete, spanEdit, spanName);
 
   listElem.appendChild(spanName);
   listElem.appendChild(spanDelete);
@@ -46,8 +50,9 @@ function buildElement (name) {
 }
 
 function addPerson () {
-  peopleDisplay.appendChild(buildElement(input.value));
-  initialDB.addToDB(input.value);
+  const name = input.value;
+  peopleDisplay.appendChild(buildListElem(name));
+  initialDB.addToDB(name);
   input.value = '';
 }
 
