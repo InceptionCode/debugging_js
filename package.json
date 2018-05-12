@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "clean-dist": "rimraf ./dist && mkdir dist",
+    "precommit": "yarn test",
     "dev-serve": "lite-server -c ./bs-config.js",
     "ngrok": " ~/Downloads/./ngrok http 8000",
     "predev-ngrok": "babel-node ./startMessage.js",
@@ -50,6 +51,7 @@
     "clean-webpack-plugin": "^0.1.19",
     "eslint-plugin-mocha": "^5.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "git-pre-commit": "^2.1.4",
     "html-webpack-plugin": "^3.2.0",
     "npm-run-all": "^4.1.2",
     "uglifyjs-webpack-plugin": "^1.2.5",
