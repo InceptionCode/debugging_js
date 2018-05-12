@@ -21,8 +21,9 @@ module.exports = {
         'one-var': 0,
         "getter-return": ERROR,
         quotes: [ERROR, 'single'],
-        "no-unused-vars": ["error", { "vars": "local", "args": "after-used", "ignoreRestSiblings": false }],
-        "no-console": WARN
+        "no-unused-vars": [ERROR, { "vars": "local", "args": "after-used", "ignoreRestSiblings": false }],
+        "no-console": WARN,
+        "arrow-spacing":  [ERROR, { "before": true, "after": true }]
     },
     globals: {
         "$": true, // Global nav needs jQuery for dev only
