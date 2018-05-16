@@ -23,7 +23,7 @@ function initPeople(people) {
 
 }
 
-function buildSpans(name, spanDelete, spanEdit, spanName) {
+function buildChildElems({name, spanDelete, spanEdit, spanName}) {
   spanName.innerHTML = name;
   spanDelete.innerHTML = ' x';
   spanDelete.setAttribute('data-id', 'deletePerson');
@@ -35,15 +35,18 @@ function buildSpans(name, spanDelete, spanEdit, spanName) {
 
 function buildListElem (name) {
 
-  const listElem = document.createElement('li'),
-        spanName = document.createElement('span'),
-        spanDelete = document.createElement('span'),
-        spanEdit = document.createElement('span');
-  buildSpans(name, spanDelete, spanEdit, spanName);
+  const listElem = document.createElement('li');
+  const childElems = {
+    name,
+    spanName: document.createElement('span'),
+    spanDelete: document.createElement('span'),
+    spanEdit: document.createElement('span')
+  };
+  buildChildElems(childElems);
 
-  listElem.appendChild(spanName);
-  listElem.appendChild(spanDelete);
-  listElem.appendChild(spanEdit);
+  listElem.appendChild(childElems.spanName);
+  listElem.appendChild(childElems.spanDelete);
+  listElem.appendChild(childElems.spanEdit);
    
 
   return listElem;
