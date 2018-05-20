@@ -1,26 +1,41 @@
 import sass from './main.sass'; // eslint-disable-line no-unused-vars
-import {initialDB} from './db.js';
+import {PEOPLE_LIST} from './People.js';
 
 /*
-Recreate this inside of peopleDisplay
+Recreate this inside of peopleDisplayList
  <li>
       <span>Darrell</span>
       <span>x</span>
   </li>
 */
-const peopleDisplay = document.querySelector('ul[data-id="people-display"]'),
+const peopleDisplayList = document.querySelector('ul[data-id="people-display"]'),
       addPersonBtn = document.querySelector('button[data-id="addPerson"]'),
       input = document.querySelector('input');
 
-initPeople(initialDB.getPeople());
-
-
-
-function initPeople(people) {
+function renderInitialPeople(people) {
   return people.forEach(person => {
-    peopleDisplay.appendChild(buildListElem(person.name));
+    const listElem = buildListElem(person.name);
+    peopleDisplayList.appendChild(listElem);
   });
+}
+renderInitialPeople(PEOPLE_LIST.getPeople());
 
+function buildListElem (name) {
+  const listElem = document.createElement('li');
+  const childElems = {
+    name,
+    spanName: document.createElement('span'),
+    spanDelete: document.createElement('span'),
+    spanEdit: document.createElement('span')
+  };
+
+  buildChildElems(childElems);
+
+  listElem.appendChild(childElems.spanName);
+  listElem.appendChild(childElems.spanDelete);
+  listElem.appendChild(childElems.spanEdit);
+
+  return listElem;
 }
 
 function buildChildElems({name, spanDelete, spanEdit, spanName}) {
@@ -33,35 +48,19 @@ function buildChildElems({name, spanDelete, spanEdit, spanName}) {
   spanEdit.addEventListener('click', editPerson);
 }
 
-function buildListElem (name) {
+addPersonBtn.addEventListener('click', addAndRenderPerson);
 
-  const listElem = document.createElement('li');
-  const childElems = {
-    name,
-    spanName: document.createElement('span'),
-    spanDelete: document.createElement('span'),
-    spanEdit: document.createElement('span')
-  };
-  buildChildElems(childElems);
-
-  listElem.appendChild(childElems.spanName);
-  listElem.appendChild(childElems.spanDelete);
-  listElem.appendChild(childElems.spanEdit);
-   
-
-  return listElem;
-}
-
-function addPerson () {
+function addAndRenderPerson () {
   const name = input.value;
-  peopleDisplay.appendChild(buildListElem(name));
-  initialDB.addToDB(name);
+  const listElem = buildListElem(name);
+  peopleDisplayList.appendChild(listElem);
+  PEOPLE_LIST.addToList(name);
   input.value = '';
 }
 
 function deletePerson (e) {
   const name = e.target.previousElementSibling.innerHTML;
-  initialDB.deleteFromDB(name);
+  PEOPLE_LIST.deleteFromList(name);
   let li = e.target.parentNode;
   li.remove();
 }
@@ -71,5 +70,3 @@ function editPerson (e) {
   deletePerson(e);
   input.value = name.innerHTML;
 }
-
-addPersonBtn.addEventListener('click', addPerson);

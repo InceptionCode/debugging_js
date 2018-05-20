@@ -1,5 +1,5 @@
 module.exports = {
-  initialDB: {
+  PEOPLE_LIST: {
     people: [
       {
         id: 1,
@@ -13,7 +13,7 @@ module.exports = {
     getPeople: function() {
       return this.people;
     },
-    addToDB: function(name) {
+    addToList: function(name) {
       const currentPeople = this.people.slice();
       const lastPersonID = currentPeople.pop().id;
       let newPerson = {
@@ -22,7 +22,7 @@ module.exports = {
       };
       return this.people.push(newPerson);
     },
-    deleteFromDB: function(name) {
+    deleteFromList: function(name) {
       const editedList = this.people.filter(person => person.name !== name);
       this.people = editedList;
     }
