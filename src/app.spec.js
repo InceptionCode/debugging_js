@@ -2,11 +2,12 @@ import {expect} from 'chai';
 import jsdom from 'jsdom';
 import fs from 'fs';
 import sinon from 'sinon';
-import {PEOPLE_LIST} from './People.js';
+import People from './store/People.js';
+import DATABASE_API from './store/DatabaseApi.js';
 
 const {JSDOM} = jsdom;
 
-const MockInitialDB = sinon.mock(PEOPLE_LIST);
+const MockDB_API = sinon.mock(DATABASE_API);
 /* global describe it */
 
 describe('Demo App', () => {
@@ -14,47 +15,45 @@ describe('Demo App', () => {
     it('should add a list element (person) and add person to DB', (done) => {
       const demo = fs.readFileSync('./src/demo-spec.html', 'utf-8');
       const { document } = (new JSDOM(demo)).window;
-      const peopleDisplay = document.querySelector('ul[data-id="people-display"]'),
+      const peopleDisplayList = document.querySelector('ul[data-id="people-display"]'),
             addPersonBtn = document.querySelector('button[data-id="addPerson"]');
 
-      
-      function buildElement () {
+      function buildListElem (name) {
         const listElem = document.createElement('li'),
               spanName = document.createElement('span'),
               spanDelete = document.createElement('span'),
               spanEdit = document.createElement('span');
-  
-        spanName.innerHTML = 'jane';
+
+        spanName.innerHTML = name;
         spanDelete.innerHTML = ' x';
         spanDelete.setAttribute('data-id','deletePerson');
         spanEdit.innerHTML = ' e';
         spanEdit.setAttribute('data-id', 'editPerson');
-  
+
         listElem.appendChild(spanName);
         listElem.appendChild(spanDelete);
         listElem.appendChild(spanEdit);
-        
-  
+
         return listElem;
       }
-      function addPerson () {
-        peopleDisplay.appendChild(buildElement());
-        sinon.spy(PEOPLE_LIST,'addToList');
-        PEOPLE_LIST.addToList('jane');
+      function addAndRenderPerson () {
+        const listElem = buildListElem('jane');
+        peopleDisplayList.appendChild(listElem);
+        sinon.spy(DATABASE_API,'addToList');
+        DATABASE_API.addToList('jane');
       }
-  
-      addPersonBtn.addEventListener('click', addPerson);
+
+      addPersonBtn.addEventListener('click', addAndRenderPerson);
       var event = document.createEvent('HTMLEvents');
       event.initEvent('click', true, false);
       addPersonBtn.dispatchEvent(event);
-      
+
       // Expect DOM List
-      expect(peopleDisplay.children.length).to.equal(3);
-      expect(peopleDisplay.children[2].tagName).to.equal('LI');
+      expect(peopleDisplayList.children.length).to.equal(3);
+      expect(peopleDisplayList.children[2].tagName).to.equal('LI');
       // Expect Database using sinon spy
-      expect(PEOPLE_LIST).to.have.property('people');
-      expect(PEOPLE_LIST.addToList.callCount).to.equal(1);
-      expect(PEOPLE_LIST.people.length).to.equal(3);
+      expect(DATABASE_API.addToList.callCount).to.equal(1);
+      expect(People.LIST.length).to.equal(3);
       done();
     });
   });
@@ -64,16 +63,16 @@ describe('Demo App', () => {
     it('Should delete a list element (person) and remove person from DB', (done) => {
       const demo = fs.readFileSync('./src/demo-spec.html', 'utf-8');
       const { document } = (new JSDOM(demo)).window;
-      const peopleDisplay = document.querySelector('ul[data-id="people-display"]'),
+      const peopleDisplayList = document.querySelector('ul[data-id="people-display"]'),
             deletePersonBtn = document.querySelector('span[data-id="deletePerson"]');
 
-      MockInitialDB.expects('deleteFromList').once()
+      MockDB_API.expects('deleteFromList').once()
         .withExactArgs('Darrell')
-        .returns(PEOPLE_LIST.people = [{id: 2, name: 'kevin'}]);
+        .returns(People.LIST = [{id: 2, name:'kevin'}]);
 
       function deletePerson (e) {
         const name = e.target.previousElementSibling.innerHTML;
-        PEOPLE_LIST.deleteFromList(name);
+        DATABASE_API.deleteFromList(name);
         let li = e.target.parentNode;
         li.remove();
       }
@@ -84,10 +83,10 @@ describe('Demo App', () => {
       deletePersonBtn.dispatchEvent(event);
 
       // Expect Database using sinon mock
-      MockInitialDB.verify();
-      expect(PEOPLE_LIST.people.length).to.equal(1);
+      MockDB_API.verify();
+      expect(People.LIST.length).to.equal(1);
       // Expect DOM List
-      expect(peopleDisplay.children.length).to.equal(1);
+      expect(peopleDisplayList.children.length).to.equal(1);
       done();
     });
   });
