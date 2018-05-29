@@ -71,9 +71,9 @@ describe('Demo App', () => {
         .returns(People.LIST = [{id: 2, name:'kevin'}]);
 
       function deletePerson (e) {
-        const name = e.target.previousElementSibling.innerHTML;
-        DATABASE_API.deleteFromList(name);
         let li = e.target.parentNode;
+        const name = li.children[0].innerHTML;
+        DATABASE_API.deleteFromList(name);
         li.remove();
       }
 

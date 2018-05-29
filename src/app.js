@@ -16,20 +16,30 @@ function renderInitialPeople(people) {
   });
 }
 
+addPersonBtn.addEventListener('click', addAndRenderPerson);
+
+function addAndRenderPerson () {
+  const name = input.value;
+  const listElem = buildListElem(name);
+  peopleDisplayList.appendChild(listElem);
+  DATABASE_API.addToList(name);
+  input.value = '';
+}
+
 function buildListElem (name) {
   const listElem = document.createElement('li');
-  const childElems = {
+  const children = {
     name,
     spanName: document.createElement('span'),
     spanDelete: document.createElement('span'),
     spanEdit: document.createElement('span')
   };
 
-  buildChildElems(childElems);
+  const {spanName, spanDelete, spanEdit} = buildChildElems(children);
 
-  listElem.appendChild(childElems.spanName);
-  listElem.appendChild(childElems.spanDelete);
-  listElem.appendChild(childElems.spanEdit);
+  listElem.appendChild(spanName);
+  listElem.appendChild(spanDelete);
+  listElem.appendChild(spanEdit);
 
   return listElem;
 }
@@ -42,26 +52,21 @@ function buildChildElems({name, spanDelete, spanEdit, spanName}) {
   spanEdit.setAttribute('data-id', 'editPerson');
   spanDelete.addEventListener('click', deletePerson);
   spanEdit.addEventListener('click', editPerson);
-}
 
-addPersonBtn.addEventListener('click', addAndRenderPerson);
-
-function addAndRenderPerson () {
-  const name = input.value;
-  const listElem = buildListElem(name);
-  peopleDisplayList.appendChild(listElem);
-  DATABASE_API.addToList(name);
-  input.value = '';
+  return {
+    spanName,
+    spanDelete,
+    spanEdit
+  };
 }
 
 function deletePerson (e) {
-  const name = e.target.previousElementSibling.innerHTML;
-  DATABASE_API.deleteFromList(name);
   let li = e.target.parentNode;
+  const name = li.children[0].innerHTML;
+  DATABASE_API.deleteFromList(name);
   li.remove();
 }
 
-// TODO: Finish editing feature
 function editPerson (e) {
   let name = e.target.parentNode.children[0];
   deletePerson(e);
